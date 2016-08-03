@@ -40,7 +40,7 @@ module Gruff
 
     DEFAULT_TARGET_WIDTH = 800
 
-    THOUSAND_SEPARATOR = ','
+    THOUSAND_SEPARATOR = '.'
 
     # Blank space above the graph
     attr_accessor :top_margin
@@ -876,7 +876,8 @@ module Gruff
       return if @hide_line_markers && !bar_value
 
       #y_offset = @graph_bottom + LABEL_MARGIN
-
+      # Cambiar los separadores de miles por '.' y decimales por ','
+      data_point.sub!(/\./,',').sub!(/,/, '.')
       @d.fill = @font_color
       @d.font = @font if @font
       @d.stroke('transparent')
