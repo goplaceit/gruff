@@ -874,10 +874,14 @@ module Gruff
     # Draws the data value over the data point in bar graphs
     def draw_value_label(x_offset, y_offset, data_point, bar_value=false)
       return if @hide_line_markers && !bar_value
-
       #y_offset = @graph_bottom + LABEL_MARGIN
       # Cambiar los separadores de miles por '.' y decimales por ','
-      data_point.sub!(/\./,',').sub!(/,/, '.')
+      if data_point =~ /\./ && data_point =~ /,/
+        data_point.gsub!(/,/,'.').sub!(/\.(?=[^\.]+$)/, ',')
+      else
+        data_point.sub!(/\./,',')
+      end
+      
       @d.fill = @font_color
       @d.font = @font if @font
       @d.stroke('transparent')
@@ -1113,7 +1117,7 @@ module Gruff
 
       parts = label.split('.')
       parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{THOUSAND_SEPARATOR}")
-      parts.join('.')
+      parts.join(',')
     end
 
     # Returns the height of the capital letter 'X' for the current font and
